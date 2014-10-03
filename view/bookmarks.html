@@ -1,0 +1,97 @@
+<!doctype html>
+<html ng-app="BksManager" ng-csp>
+
+<head>
+	<title>Bks-Manager</title>
+
+	<!-- Bootstrap -->
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Page css -->
+	<link href="../css/bookmarks.css" rel="stylesheet">
+
+	<!-- Libs -->
+	<script src="../lib/underscore-1.7.0-min.js"></script>
+	<script src="../lib/jquery-1.11.1.min.js"></script>
+	<script src="../lib/firebase-1.0.15-min.js"></script>
+	<script src="../lib/angular-1.2.25.min.js"></script>
+	<script src="../lib/bootstrap.min.js"></script>
+
+	<!-- Scripts -->
+	<script src="../script/domain/bookmark.js"></script>
+	<script src="../script/service/service.firebase.js"></script>
+	<script src="../script/filter/filters.js"></script>
+	<script src="../script/controller/controller.bookmarks.js"></script>
+</head>
+
+<body ng-controller="BksController" ng-init="loadPage()">
+	<div class="container-fluid">
+
+		<div class="row">
+			<h1>Bookmarks everywhere</h1>
+			<hr>
+			<!-- Buttons header -->
+			<div id="buttonsHeader">
+				<button ng-click="reloadFromBrowser()" class="btn btn-primary">
+					Reload from browser
+				</button>
+			</div>
+			<hr>
+		</div>
+
+		<div class="row">
+
+			<!-- Root groups (level 1) -->
+			<div class="firstCol col-md-2">
+				<table id="tb_groupsList" class="table table-responsive table-striped table-hover">
+					<tbody>
+						<tr ng-repeat="group in tableGroups | filter:rootFoldersFilter:strict | orderBy:'title'"
+								ng-class="{info: group.id == selectedParents.parent1}">
+							<td ng-click="clickOnParent1(group)">{{group.title}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Level 2 groups (subgroups of selected root group) -->
+			<div class="col-md-2" ng-if="showLvl2Groups()">
+				<table id="tb_groupsLvl2" class="table table-responsive table-striped table-hover">
+					<tbody>
+						<tr ng-repeat="subGroup in filteredSubgroups = (tableGroups | groupsLvl2Filter: selectedParents) | orderBy:'title'"
+								ng-class="{success: subGroup.id == selectedParents.parent2}">
+							<td ng-click="clickOnParent2(subGroup)">{{subGroup.title}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Level 3 groups (subgroups of selected level 2 group) -->
+			<div class="col-md-2" ng-if="showLvl3Groups()">
+				<table id="tb_groupsLvl3" class="table table-responsive table-striped table-hover">
+					<tbody>
+					<tr ng-repeat="subGroup in filteredSubgroups = (tableGroups | groupsLvl3Filter: selectedParents) | orderBy:'title'"
+							ng-class="{warning: subGroup.id == selectedParents.parent3}">
+						<td ng-click="clickOnParent3(subGroup)">{{subGroup.title}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div id="div_bksList" class="lastCol"
+					 ng-class="showLvl3Groups() ? 'col-md-6' : (showLvl2Groups() ? 'col-md-8' : 'col-md-10')">
+				<table class="table table-responsive table-striped table-hover">
+					<tbody>
+						<tr ng-repeat="bookmark in filteredBookmarks = (tableBookmarks | bookmarksFilter: selectedParents) | orderBy:'title'" ng-click="clickOnBookmark(bookmark.url)">
+							<td>{{bookmark.title}}</td>
+							<td><span class="btn-link">{{bookmark.url}}</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+	</div>
+</body>
+
+</html>
