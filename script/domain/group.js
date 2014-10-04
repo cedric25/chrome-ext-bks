@@ -1,15 +1,13 @@
 'use strict';
 
 /**
- * Classe 'Bookmark'
+ * Classe 'Group'
  * @param id
  * @param title
- * @param url
  * @param parentId
  */
-var Bookmark = function(id, title, url, parentId) {
+var Group = function(id, title, parentId) {
   this.id = id;
   this.title = title;
-  this.url = url;
   this.parentId = parentId;
 };

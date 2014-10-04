@@ -7,7 +7,7 @@
 	<!-- Bootstrap -->
 	<link href="../css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Page css -->
+	<!-- CSS -->
 	<link href="../css/bookmarks.css" rel="stylesheet">
 
 	<!-- Libs -->
@@ -19,7 +19,9 @@
 
 	<!-- Scripts -->
 	<script src="../script/domain/bookmark.js"></script>
+	<script src="../script/domain/group.js"></script>
 	<script src="../script/service/service.firebase.js"></script>
+	<script src="../script/service/service.bookmarks.js"></script>
 	<script src="../script/filter/filters.js"></script>
 	<script src="../script/controller/controller.bookmarks.js"></script>
 </head>
@@ -28,13 +30,15 @@
 	<div class="container-fluid">
 
 		<div class="row">
-			<h1>Bookmarks everywhere</h1>
+			<h1>Cloud Bookmarks</h1>
 			<hr>
 			<!-- Buttons header -->
 			<div id="buttonsHeader">
 				<button ng-click="reloadFromBrowser()" class="btn btn-primary">
 					Reload from browser
 				</button>
+				<span class="sp_greenMessage" ng-if="greenMessage"><span class="glyphicon glyphicon-ok-circle"></span>{{greenMessage}}</span>
+				<span class="sp_redMessage" ng-if="redMessage"><span class="glyphicon glyphicon-remove-circle"></span>{{redMessage}}</span>
 			</div>
 			<hr>
 		</div>
@@ -81,9 +85,12 @@
 					 ng-class="showLvl3Groups() ? 'col-md-6' : (showLvl2Groups() ? 'col-md-8' : 'col-md-10')">
 				<table class="table table-responsive table-striped table-hover">
 					<tbody>
-						<tr ng-repeat="bookmark in filteredBookmarks = (tableBookmarks | bookmarksFilter: selectedParents) | orderBy:'title'" ng-click="clickOnBookmark(bookmark.url)">
-							<td>{{bookmark.title}}</td>
-							<td><span class="btn-link">{{bookmark.url}}</span></td>
+						<tr ng-repeat="bookmark in filteredBookmarks = (tableBookmarks | bookmarksFilter: selectedParents) | orderBy:'title'">
+							<td ng-click="clickOnBookmark(bookmark.url)">{{bookmark.title}}</td>
+							<td class="removeIcon" ng-click="removeBookmark(bookmark.id)">
+								<span class="glyphicon glyphicon-remove"></span>
+							</td>
+							<td ng-click="clickOnBookmark(bookmark.url)"><span class="btn-link">{{bookmark.url}}</span></td>
 						</tr>
 					</tbody>
 				</table>

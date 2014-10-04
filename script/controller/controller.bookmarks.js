@@ -8,15 +8,6 @@ angular.module('BksManager', ['BksManager.filters'])
    */
   .controller('BksController', ['$scope', function($scope) {
 
-    /** Folders of bookmarks */
-    $scope.tableGroups = [];
-
-    /** List of bookmarks */
-    $scope.tableBookmarks = [];
-
-    /** List of distinct URLs  */
-    var tableUrls = [];
-
     $scope.selectedParents = {
       parent1: "",
       parent2: "",
@@ -30,47 +21,18 @@ angular.module('BksManager', ['BksManager.filters'])
 
     /** Called at initialization */
     $scope.loadPage = function () {
-      // Retrieves user's bookmarks from Firebase
-      firebaseService.getTree($scope.getFirebaseTreeCallback);
+      // Retrieves user's bookmarks from the cloud
+      bookmarksService.getBookmarks($scope.getTreeCallback);
     };
 
     /**
      * Callback called each time the tree changes into Firebase
-     * @param firebaseTree
+     * @param bksObject
      */
-    $scope.getFirebaseTreeCallback = function(firebaseTree) {
-
-      $scope.tableGroups = [];
-      $scope.tableBookmarks = [];
-      tableUrls = [];
-
-      var firebaseTreeObj = firebaseTree.val();
-
-      // Explodes bookmarks into tables of groups and bookmarks
-      if (typeof firebaseTreeObj === 'object') {
-        _.each(firebaseTreeObj[0].children, $scope.populateBksTable);
-      }
-
+    $scope.getTreeCallback = function(bksObject) {
+      $scope.tableGroups = bksObject.tableGroups;
+      $scope.tableBookmarks = bksObject.tableBookmarks;
       $scope.$apply();
-    };
-
-    /**
-     * Populates the bookmarks' table
-     * @param node
-     */
-    $scope.populateBksTable = function (node) {
-      if (node.url != undefined) {
-        if ($.inArray(node.url, tableUrls) == -1) {
-          var bkObj = new Bookmark(node.id, node.title, node.url, node.parentId);
-          $scope.tableBookmarks.push(bkObj);
-          tableUrls.push(bkObj.url);
-        }
-      }
-      // Not a bookmark, but a group of them (or an empty group)
-      else if (!_.isUndefined(node.children) && node.children.length > 0) {
-        $scope.tableGroups.push(node);
-        _.each(node.children, $scope.populateBksTable);
-      }
     };
 
     /**
@@ -78,8 +40,10 @@ angular.module('BksManager', ['BksManager.filters'])
      */
     $scope.reloadFromBrowser = function() {
       if (confirm('Are you sure you want to replace all remote bookmarks?')) {
+        $scope.tableGroups = [];
+        $scope.tableBookmarks = [];
         chrome.bookmarks.getTree(function callback(tree) {
-          firebaseService.saveFlatBookmarks(tree, firebaseSaveCallback);
+          bookmarksService.saveChromeBookmarks(tree, firebaseSaveCallback);
         });
       }
     };
@@ -88,9 +52,8 @@ angular.module('BksManager', ['BksManager.filters'])
      * Callback function after Firebase persistency
      */
     var firebaseSaveCallback = function() {
-      console.log("Firebase save finished");
       $scope.selectedParents.parent1 = "";
-      $scope.$apply();
+      $scope.loadPage();
     };
 
     /**
@@ -153,8 +116,29 @@ angular.module('BksManager', ['BksManager.filters'])
       return $scope.selectedParents.parent2 != "" && subGroups.length;
     };
 
+    /**
+     * Opens a new tab for the bookmark clicked on
+     * @param url
+     */
     $scope.clickOnBookmark = function(url) {
       window.open(url);
+    };
+
+    $scope.removeBookmark = function(bookmarkId) {
+      console.log(bookmarkId);
+      firebaseService.removeBookmark(bookmarkId, function(error) {
+        if (error) {
+          $scope.redMessage = "An error occured :-(";
+        }
+        else {
+          $scope.greenMessage = "Bookmark removed successfully!";
+          $scope.$apply();
+          setTimeout(function() {
+            $scope.greenMessage = "";
+            $scope.$apply();
+          }, 2000);
+        }
+      });
     };
 
   }]);

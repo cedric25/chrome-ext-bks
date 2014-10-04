@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="BksManager" ng-csp>
+
+<head>
+	<title>Bookmarks everywhere</title>
+
+	<!-- Bootstrap -->
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- CSS -->
+	<link href="../css/popup.css" rel="stylesheet">
+
+	<!-- Libs -->
+	<script src="../lib/underscore-1.7.0-min.js"></script>
+	<script src="../lib/jquery-1.11.1.min.js"></script>
+	<script src="../lib/firebase-1.0.15-min.js"></script>
+	<script src="../lib/angular-1.2.25.min.js"></script>
+	<script src="../lib/bootstrap.min.js"></script>
+
+	<!-- Scripts -->
+	<script src="../script/domain/bookmark.js"></script>
+	<script src="../script/service/service.firebase.js"></script>
+	<script src="../script/service/service.bookmarks.js"></script>
+	<script src="../script/controller/controller.popup.js"></script>
+</head>
+
+<body ng-controller="BksController" ng-init="loadPage()">
+	<div class="container container-fluid">
+
+		<table class="table table-hover">
+			<tbody>
+				<!-- Open new tab with all cloud bookmarks -->
+				<tr>
+					<td class="links">
+						<a ng-click="openHome()">My Bookmarks</a>
+					</td>
+				</tr>
+				<!-- Add current webpage to cloud bookmarks -->
+				<tr>
+					<td class="links">
+						<a ng-click="createBookmark()"><img class="star" src="../image/star.png" />Add</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table class="table">
+			<tbody>
+				<!-- Title of eventual bookmark -->
+				<tr>
+					<td class="labels">
+						<label for="it_title">Title: </label>
+					</td>
+					<td class="inputs">
+						<input id="it_title" type="text" ng-model="newBookmark.title" placeholder="Title" />
+					</td>
+				</tr>
+				<!-- Folder to put new bookmark -->
+				<tr>
+					<td class="labels">
+						<label for="s_group">Group: </label>
+					</td>
+					<td class="inputs">
+						<select id="s_group" ng-model="newBookmark.parentId" ng-options="group.id as group.title for group in tableGroups"></select>
+					</td>
+				</tr>
+				<!-- Current webpage URL -->
+				<tr>
+					<td colspan="2" class="url" ng-bind="newBookmark.url"></td>
+				</tr>
+				<!-- Success message -->
+				<tr ng-if="message">
+					<td colspan="2" class="td_successMessage"><span class="glyphicon glyphicon-ok"></span>{{message}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>

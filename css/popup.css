@@ -1,0 +1,59 @@
+.container {
+	width: 300px;
+}
+.container-fluid {
+	padding: 0;
+}
+.table {
+	margin: 0;
+}
+.table > tbody > tr > td {
+	padding: 8px;
+	text-align: center;
+}
+.table > tbody > tr > td.links {
+	padding: 0;
+	line-height: 3;
+}
+.table > tbody > tr > td.links:hover {
+	cursor: pointer;
+}
+.table > tbody > tr > td.labels {
+	width: 15%;
+	text-align: right;
+}
+.table > tbody > tr > td.inputs {
+	text-align: left;
+ }
+.table > tbody > tr > td.url {
+	 font-size: 0.8em;
+ }
+
+a {
+	display: block;
+	height: 100%;
+}
+a:hover {
+	text-decoration: none;
+}
+
+label {
+	margin: 0;
+	font-weight: normal;
+}
+
+#s_group {
+	width: 174px;
+}
+
+.star {
+	margin-right: 10px;
+	margin-bottom: 4px;
+}
+
+.td_successMessage {
+	color: darkgreen;
+}
+.glyphicon-ok {
+	margin-right: 10px;
+}

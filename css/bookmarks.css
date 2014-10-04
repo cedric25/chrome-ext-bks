@@ -29,3 +29,24 @@ h1 {
 #div_bksList tr {
 	cursor: pointer;
 }
+
+.removeIcon {
+	width: 31px;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+}
+
+.glyphicon-ok-circle,
+.glyphicon-remove-circle {
+	margin-right: 10px;
+}
+.sp_greenMessage,
+.sp_redMessage {
+	margin-left: 20px;
+}
+.sp_greenMessage {
+	color: darkgreen;
+}
+.sp_redMessage {
+	color: darkred;
+}
