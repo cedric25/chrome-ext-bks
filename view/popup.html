@@ -61,7 +61,7 @@
 						<label for="s_group">Group: </label>
 					</td>
 					<td class="inputs">
-						<select id="s_group" ng-model="newBookmark.parentId" ng-options="group.id as group.title for group in tableGroups"></select>
+						<select id="s_group" ng-model="newBookmark.parentId" ng-options="group.id as group.title for group in tableGroups | orderBy:'title'"></select>
 					</td>
 				</tr>
 				<!-- Current webpage URL -->

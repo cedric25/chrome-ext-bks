@@ -30,10 +30,17 @@ h1 {
 	cursor: pointer;
 }
 
-.removeIcon {
+.removeIcon,
+.removeGroupIcon {
 	width: 31px;
 	border-left: 1px solid #cccccc;
+}
+.removeIcon {
 	border-right: 1px solid #cccccc;
+}
+
+.glyphicon-remove {
+	color: #cccccc;
 }
 
 .glyphicon-ok-circle,
@@ -49,4 +56,15 @@ h1 {
 }
 .sp_redMessage {
 	color: darkred;
+}
+
+.glyphicon-plus {
+	color: #11b6f3;
+}
+.glyphicon-ok {
+	color: darkgreen;
+	margin-left: 5px;
+}
+.it_titleNewGroup {
+	width: 165px;
 }

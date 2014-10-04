@@ -49,9 +49,23 @@
 			<div class="firstCol col-md-2">
 				<table id="tb_groupsList" class="table table-responsive table-striped table-hover">
 					<tbody>
-						<tr ng-repeat="group in tableGroups | filter:rootFoldersFilter:strict | orderBy:'title'"
+						<tr ng-repeat="group in tableGroups | rootFoldersFilter | orderBy:'title'"
 								ng-class="{info: group.id == selectedParents.parent1}">
 							<td ng-click="clickOnParent1(group)">{{group.title}}</td>
+							<td class="removeGroupIcon" ng-click="removeGroup(group.id)">
+								<span class="glyphicon glyphicon-remove"></span>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" ng-click="showInputNewGroup = true">
+								<span class="glyphicon glyphicon-plus"></span>
+							</td>
+						</tr>
+						<tr ng-if="showInputNewGroup">
+							<td colspan="2">
+								<input type="text" ng-model="newGroup.title" class="it_titleNewGroup" />
+								<span class="glyphicon glyphicon-ok" ng-click="addGroup(0)"></span>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -85,7 +99,7 @@
 					 ng-class="showLvl3Groups() ? 'col-md-6' : (showLvl2Groups() ? 'col-md-8' : 'col-md-10')">
 				<table class="table table-responsive table-striped table-hover">
 					<tbody>
-						<tr ng-repeat="bookmark in filteredBookmarks = (tableBookmarks | bookmarksFilter: selectedParents) | orderBy:'title'">
+						<tr ng-repeat="bookmark in filteredBookmarks = (tableBookmarks | bookmarksFilter: selectedParents)">
 							<td ng-click="clickOnBookmark(bookmark.url)">{{bookmark.title}}</td>
 							<td class="removeIcon" ng-click="removeBookmark(bookmark.id)">
 								<span class="glyphicon glyphicon-remove"></span>

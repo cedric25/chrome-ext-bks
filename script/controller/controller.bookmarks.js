@@ -8,15 +8,18 @@ angular.module('BksManager', ['BksManager.filters'])
    */
   .controller('BksController', ['$scope', function($scope) {
 
+    $scope.showInputNewGroup = false;
+
+    // New group object
+    $scope.newGroup = {
+      title: "",
+      parentId: ""
+    };
+
     $scope.selectedParents = {
       parent1: "",
       parent2: "",
       parent3: ""
-    };
-
-    /** Only the root folders */
-    $scope.rootFoldersFilter = {
-      parentId: "0"
     };
 
     /** Called at initialization */
@@ -124,21 +127,53 @@ angular.module('BksManager', ['BksManager.filters'])
       window.open(url);
     };
 
+    /**
+     * Removes a bookmark from cloud bookmarks
+     * @param bookmarkId
+     */
     $scope.removeBookmark = function(bookmarkId) {
-      console.log(bookmarkId);
       firebaseService.removeBookmark(bookmarkId, function(error) {
-        if (error) {
-          $scope.redMessage = "An error occured :-(";
-        }
-        else {
-          $scope.greenMessage = "Bookmark removed successfully!";
-          $scope.$apply();
-          setTimeout(function() {
-            $scope.greenMessage = "";
-            $scope.$apply();
-          }, 2000);
-        }
+        $scope.addMessage(error, "Bookmark removed successfully!");
       });
+    };
+
+    /**
+     * Removes a group from cloud groups
+     * @param groupId
+     */
+    $scope.removeGroup = function(groupId) {
+      firebaseService.removeGroup(groupId, function(error) {
+        $scope.addMessage(error, "Group removed successfully!");
+      });
+    };
+
+    /**
+     * Adds a new group of bookmarks
+     * @param parentId
+     */
+    $scope.addGroup = function(parentId) {
+      if (!_.isEmpty($scope.newGroup.title)) {
+        $scope.newGroup.parentId = parentId.toString();
+        bookmarksService.createGroup($scope.newGroup, function(error) {
+          $scope.addMessage(error, "Group created successfully!");
+        });
+        $scope.showInputNewGroup = false;
+        $scope.newGroup.title = "";
+      }
+    };
+
+    $scope.addMessage = function(error, greenMessage) {
+      if (error) {
+        $scope.redMessage = "An error occured :-(";
+      }
+      else {
+        $scope.greenMessage = greenMessage;
+        $scope.$apply();
+        setTimeout(function() {
+          $scope.greenMessage = "";
+          $scope.$apply();
+        }, 2000);
+      }
     };
 
   }]);

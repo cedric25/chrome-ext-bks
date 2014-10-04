@@ -49,8 +49,10 @@ angular.module('BksManager', [])
      * @param bksObject
      */
     $scope.getTreeCallback = function(bksObject) {
-      $scope.tableGroups = bksObject.tableGroups;
-      $scope.tableBookmarks = bksObject.tableBookmarks;
+      var tableGroups = bksObject.tableGroups;
+      $scope.tableGroups = _.sortBy(tableGroups, function(group) {
+        return group.title;
+      });
       $scope.$apply();
     };
 

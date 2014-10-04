@@ -53,7 +53,7 @@ var bookmarksService = {
     // Not a bookmark, but a group of them (or an empty group)
     else if (!_.isUndefined(node.children) && node.children.length > 0) {
       var groupObj = new Group(node.id, node.title, node.parentId);
-      bookmarksService.tableGroups.push(groupObj);
+      bookmarksService.tableGroups[groupObj.id] = groupObj;
       _.each(node.children, bookmarksService.populateBksTable);
     }
   },
@@ -84,6 +84,15 @@ var bookmarksService = {
    */
   createBookmark: function(bookmark, callback) {
     firebaseService.createBookmark(bookmark, callback);
+  },
+
+  /**
+   * Creates a new group into Firebase
+   * @param group Object to be saved
+   * @param callback Callback
+   */
+  createGroup: function(group, callback) {
+    firebaseService.createGroup(group, callback);
   }
 
 };

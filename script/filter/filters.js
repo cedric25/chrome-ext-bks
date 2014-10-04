@@ -19,7 +19,20 @@ angular.module('BksManager.filters', [])
           return bookmark.parentId === selectedParents.parent1;
         });
       }
-      return tableBookmarks;
+      return _.sortBy(tableBookmarks, function(bookmark) {
+        return bookmark.title;
+      });
+    };
+  }])
+
+  /**
+   * Only groups with parentId === "0"
+   */
+  .filter('rootFoldersFilter', [function() {
+    return function(tableGroups) {
+      return _.filter(tableGroups, function(group) {
+        return group.parentId === "0";
+      });
     };
   }])
 

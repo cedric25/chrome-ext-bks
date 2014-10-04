@@ -33,7 +33,7 @@ var firebaseService = {
     var newBookmarkRef = myDataRef.child('bookmarks').push(bookmark, function(error) {
       // Sets id
       newBookmarkRef.child('id').set(newBookmarkRef.name());
-      callback();
+      callback(error);
     });
   },
 
@@ -47,6 +47,18 @@ var firebaseService = {
 
   removeBookmark: function(bookmarkId, callback) {
     myDataRef.child('bookmarks/' + bookmarkId).remove(callback);
+  },
+
+  removeGroup: function(groupId, callback) {
+    myDataRef.child('groups/' + groupId).remove(callback);
+  },
+
+  createGroup: function(group, callback) {
+    var newGroupRef = myDataRef.child('groups').push(group, function(error) {
+      // Sets id
+      newGroupRef.child('id').set(newGroupRef.name());
+      callback(error);
+    });
   }
 
 };
